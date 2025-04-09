@@ -4,6 +4,7 @@ import Devbar from '@/components/Devbar/Devbar';
 
 import { useAuthContext } from './components/AuthProvider';
 import Navbar from './components/Navbar';
+//this is the app for testing sonarqube with github actions
 const App = () => {
   const { token } = useAuthContext();
   return (
