@@ -36,7 +36,7 @@ jobs:
             --config=p/python-best-practices \
             --config=p/javascript \
             --config=p/ci \
-            --format sarif \
+            --f sarif \
             --output semgrep-results.sarif
 
       - name: Upload Semgrep SARIF as artifact
