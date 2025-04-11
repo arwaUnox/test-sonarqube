@@ -30,7 +30,7 @@ jobs:
 
       - name: Run Semgrep and save SARIF report
         run: |
-          semgrep --config=p/maintainability \
+          semgrep scan --config=p/maintainability \
                   --config=p/security-audit \
                   --config=p/python-best-practices \
                   --config=p/javascript \
