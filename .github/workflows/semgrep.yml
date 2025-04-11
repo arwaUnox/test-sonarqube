@@ -25,18 +25,19 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install Semgrep
-        run: pip install semgrep
+      - name: Install Semgrep (classic CLI style)
+        run: pip install 'semgrep<1.36'
 
-      - name: Run Semgrep and save SARIF report
+      - name: Run Semgrep with SARIF output
         run: |
-          semgrep scan --config=p/maintainability \
-                  --config=p/security-audit \
-                  --config=p/python-best-practices \
-                  --config=p/javascript \
-                  --config=p/ci \
-                  --format sarif \
-                  --output semgrep-results.sarif
+          semgrep \
+            --config=p/maintainability \
+            --config=p/security-audit \
+            --config=p/python-best-practices \
+            --config=p/javascript \
+            --config=p/ci \
+            --format sarif \
+            --output semgrep-results.sarif
 
       - name: Upload Semgrep SARIF as artifact
         uses: actions/upload-artifact@v4
