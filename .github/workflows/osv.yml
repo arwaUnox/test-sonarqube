@@ -1,4 +1,4 @@
-name: OSV-NewScanner PR Scan
+name: OSV-Scanner on push Scan
 
 # Change "main" to your default branch if you use a different name, i.e. "master"
 on:

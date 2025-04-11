@@ -1,4 +1,4 @@
-name: trivy new veulnerability scanner
+name: trivy  veulnerability scanner
 on:
   push:
     branches:
