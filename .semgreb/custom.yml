@@ -1,0 +1,75 @@
+rules:
+  - id: too-many-returns
+    patterns:
+      - pattern: |
+          function $F(...) {
+            ...
+            return ...;
+            ...
+            return ...;
+            ...
+            return ...;
+          }
+    message: "Function has too many return statements."
+    languages: [javascript, typescript]
+    severity: WARNING
+    metadata:
+      category: maintainability
+      sonar-equivalent: javascript:S1142
+
+  - id: nested-if-depth
+    pattern: |
+      if (...) {
+        if (...) {
+          if (...) {
+            ...
+          }
+        }
+      }
+    message: "Deeply nested if-statements reduce readability. Consider flattening logic."
+    languages: [javascript, typescript]
+    severity: WARNING
+    metadata:
+      category: maintainability
+      sonar-equivalent: javascript:NestedControlFlow
+
+  - id: empty-catch-block
+    pattern: |
+      try {
+        ...
+      } catch (e) {
+      }
+    message: "Empty catch blocks can hide errors and should be avoided."
+    languages: [javascript, typescript]
+    severity: ERROR
+    metadata:
+      category: reliability
+      sonar-equivalent: javascript:S108
+
+  - id: duplicate-if-conditions
+    pattern: |
+      if ($COND) {
+        ...
+      } else if ($COND) {
+        ...
+      }
+    message: "Duplicate conditions in if/else if block. Likely a copy-paste or logic bug."
+    languages: [javascript, typescript]
+    severity: WARNING
+    metadata:
+      category: reliability
+      sonar-equivalent: javascript:S3923
+
+  - id: large-function
+    pattern: |
+      function $FUNC(...) {
+        ...
+      }
+    message: "Function might be too large. Consider splitting into smaller units."
+    languages: [javascript, typescript]
+    severity: INFO
+    metadata:
+      category: maintainability
+      max_lines: 50
+      sonar-equivalent: javascript:S138
+

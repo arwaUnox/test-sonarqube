@@ -28,7 +28,11 @@ jobs:
         run: pip install semgrep
 
       - name: Run Semgrep and save report
-        run: semgrep scan --config=auto --sarif > semgrep-results.sarif || true
+        run: semgrep scan \
+            --config=auto \
+            --config=.semgrep/custom.yml \
+            --metrics=off \
+            --sarif > semgrep-results.sarif || true
     
 
       - name: Upload Semgrep report artifact
