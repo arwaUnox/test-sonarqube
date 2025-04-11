@@ -28,7 +28,7 @@ jobs:
         run: pip install semgrep
 
       - name: Run Semgrep and save report
-        run: semgrep scan \
+        run: semgrep  \
             --config=auto \
             --config=.semgrep/custom.yml \
             --metrics=off \
