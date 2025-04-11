@@ -28,7 +28,7 @@ jobs:
         run: pip install semgrep
 
       - name: Run Semgrep and save report
-        run: semgrep --config=default
+        run: semgrep --config=auto
     
 
     #   - name: Upload Semgrep report artifact
