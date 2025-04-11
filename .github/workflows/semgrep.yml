@@ -28,11 +28,14 @@ jobs:
         run: pip install semgrep
 
       - name: Run Semgrep and save report
-        run: semgrep  \
+        run: |
+          semgrep scan \
             --config=auto \
             --config=.semgrep/custom.yml \
             --metrics=off \
-            --sarif > semgrep-results.sarif || true
+            --sarif \
+            --output=semgrep-results.sarif \
+            . || true
  
     
 
