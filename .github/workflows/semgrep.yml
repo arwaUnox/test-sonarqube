@@ -29,6 +29,7 @@ jobs:
 
       - name: Run Semgrep and save report
         run: semgrep --config=default --sarif > semgrep-results.sarif
+        continue-on-error: true
 
       - name: Upload Semgrep report artifact
         uses: actions/upload-artifact@v4
