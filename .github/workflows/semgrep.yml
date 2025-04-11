@@ -32,9 +32,8 @@ jobs:
             --config=auto \
             --config=.semgrep/custom.yml \
             --metrics=off \
-            --sarif \
-            --output=semgrep-results.sarif || true
-
+            --sarif > semgrep-results.sarif || true
+ 
     
 
       - name: Upload Semgrep report artifact
