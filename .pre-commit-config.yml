@@ -6,4 +6,4 @@ repos:
       entry: semgrep
       # Replace <SEMGREP_RULESET_URL> with your custom rule source
       # or see https://semgrep.dev/explore to select a ruleset and copy its URL
-      args: ['--config', '.semgrep/custom.yml', '--error', '--skip-unknown-extensions']
+      args: ['--config',  'p/javascript-typescript' , '--error', '--skip-unknown-extensions']
