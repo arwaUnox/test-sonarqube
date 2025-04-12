@@ -1,0 +1,9 @@
+repos:
+- repo: https://github.com/semgrep/pre-commit
+  rev: 'SEMGREP_VERSION_LATEST'
+  hooks:
+    - id: semgrep
+      entry: semgrep
+      # Replace <SEMGREP_RULESET_URL> with your custom rule source
+      # or see https://semgrep.dev/explore to select a ruleset and copy its URL
+      args: ['--config', '.semgrep/custom.yml', '--error', '--skip-unknown-extensions']
