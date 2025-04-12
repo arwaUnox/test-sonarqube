@@ -1,0 +1,18 @@
+repos:
+- repo: https://github.com/semgrep/pre-commit
+  rev: 'v1.118.0'
+  hooks:
+    - id: semgrep
+      entry: semgrep
+      # Replace <SEMGREP_RULESET_URL> with your custom rule source
+      # or see https://semgrep.dev/explore to select a ruleset and copy its URL
+      # args: ['--config',  'p/javascript-typescript' , '--error', '--skip-unknown-extensions']
+      args:
+          - '--config'
+          - 'p/typescript'
+          - '--config'
+          - 'p/react'
+          - '--config'
+          - 'p/owasp-top-ten'
+          - '--error'
+          - '--skip-unknown-extensions'
