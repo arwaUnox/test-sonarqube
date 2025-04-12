@@ -31,6 +31,9 @@ jobs:
         run: |
           semgrep scan \
             --config=auto \
+            --config='p/typescript' \
+            --config='p/react' \
+            --config='p/owasp-top-ten' \
             --config=.semgrep/custom.yml \
             --sarif \
             --output=semgrep-results.sarif \
