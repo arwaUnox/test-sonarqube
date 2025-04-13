@@ -36,6 +36,12 @@ jobs:
         run: |
           jq 'del(.runs[].tool.driver.notifications)' qlty-results.sarif > cleaned-results.sarif
 
+      - name: Upload qlty report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qlty-report
+          path: cleaned-results.sarif
+
       - name: Upload SARIF to GitHub Security
         uses: github/codeql-action/upload-sarif@v3
         with:
