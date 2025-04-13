@@ -41,15 +41,20 @@ jobs:
         run: |
           jq '
           .runs[0].results |= map(
-              # Fix invalid region values
+              # Ensure region object exists
               (.locations[0].physicalLocation.region //= {
               "startLine": 1,
               "startColumn": 1,
               "endLine": 1,
               "endColumn": 1
               }) |
-              (.locations[0].physicalLocation.region.endLine |= if . == 0 then 1 else . end) |
-              (.locations[0].physicalLocation.region.endColumn |= if . == 0 then 1 else . end) |
+              # Force integers and fallback if invalid
+              (.locations[0].physicalLocation.region.endLine |=
+              (if (type == "number") and (. >= 1) then . else 1 end)
+              ) |
+              (.locations[0].physicalLocation.region.endColumn |=
+              (if (type == "number") and (. >= 1) then . else 1 end)
+              ) |
               # Remove illegal SARIF fields
               (.taxa |= map(del(.name))) |
               del(.fixes)
