@@ -1,54 +1,26 @@
-name: semgrep community ci
-
 on:
+  workflow_dispatch: {}
+  pull_request: {}
   push:
     branches:
-      - main
-
-permissions:
-  contents: read
-  security-events: write
-  issues: write
-  pull-requests: write
-
+    - main
+    - master
+    paths:
+    - .github/workflows/semgrep.yml
+  schedule:
+  # random HH:MM to avoid a load spike on GitHub Actions at 00:00
+  - cron: 44 17 * * *
+name: Semgrep
 jobs:
   semgrep:
+    name: semgrep/ci
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+    env:
+      SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+    container:
+      image: semgrep/semgrep
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-
-      - name: Install Semgrep
-        run: pip install semgrep
-
-      - name: Run Semgrep and save report
-        run: |
-          semgrep scan \
-            --config=auto \
-            --config='p/typescript' \
-            --config='p/react' \
-            --config='p/owasp-top-ten' \
-            --config=.semgrep/custom.yml \
-            --sarif \
-            --output=semgrep-results.sarif \
-            . || true
- 
-    
-
-      - name: Upload Semgrep report artifact
-        uses: actions/upload-artifact@v4
-        with:
-            name: semgrep-report
-            path: semgrep-results.sarif 
-      - name: Upload SARIF to GitHub Security Dashboard
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-            sarif_file: semgrep-results.sarif
-
-  
+    - uses: actions/checkout@v4
+    - run: semgrep ci
