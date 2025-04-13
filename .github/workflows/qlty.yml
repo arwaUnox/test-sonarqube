@@ -41,11 +41,6 @@ jobs:
         with:
           sarif_file: cleaned-results.sarif
 
-      - name: Upload SARIF to GitHub Security Dashboard
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: cleaned-results.sarif
-
         #Start this code is to create qlty output file so it would be parsed and exported as github issues
         #  qlty smells --all | sed 's/\x1B\[[0-9;]*[mK]//g' > qlty-output.txt || true
 
