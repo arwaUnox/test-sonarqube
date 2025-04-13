@@ -1,0 +1,159 @@
+name: Qlty Code Quality Checks
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  security-events: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  qlty-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch all history for a full clone
+
+      - name: Install Qlty
+        run: |
+          curl -sSL https://qlty.sh | bash -
+          echo "$HOME/.qlty/bin" >> $GITHUB_PATH
+
+      - name: Run Qlty Check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NO_COLOR: true
+
+        run: |
+          qlty check --all --sarif > qlty-results.sarif || true
+      - name: Upload qlty report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qlty-report
+          path: qlty-results.sarif
+
+      - name: Upload SARIF to GitHub Security Dashboard
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: qlty-results.sarif
+
+        #Start this code is to create qlty output file so it would be parsed and exported as github issues
+        #  qlty smells --all | sed 's/\x1B\[[0-9;]*[mK]//g' > qlty-output.txt || true
+
+        # End
+        # qlty check || true
+        # qlty fmt --all || true
+        # qlty smells --all || true
+        # qlty metrics --all  || true
+      # - name: Parse Qlty Output to JSON
+      #   run: |
+      #     python src/parse_qlty_to_json.py qlty-output.txt clean-output.json
+      # - name: Ensure 'code-quality' label exists
+      #   env:
+      #     GH_TOKEN: ${{ github.token }}
+      #   run: |
+      #     gh label list | grep -q "code-quality" || gh label create "code-quality" --color "#006b75" --description "Code Quality Issues"
+
+      # - name: Create GitHub Issues from JSON
+      #   env:
+      #     GH_TOKEN: ${{ github.token }}
+      #   run: |
+      #     jq -c '.[]'  clean-output.json  | while read issue; do
+      #       title=$(echo "$issue" | jq -r '.title')
+      #       body=$(echo "$issue" | jq -r '.body')
+      #       labels=$(echo "$issue" | jq -r '.labels | join(",")')
+
+      #       echo "Creating issue: $title"
+      #       gh issue create \
+      #         --title "$title" \
+      #         --body "$body" \
+      #         --label "$labels"
+      #     done
+
+      # - name: Create GitHub Issue from Output
+      #   env:
+      #       GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      #   run: |
+      #     if grep -q "Found" clean-output.json; then
+      #       gh issue create \
+      #         --title "Qlty Code Smells Detected" \
+      #         --body "$(cat clean-output.json)" \
+      #         --label "code-quality"
+      #     fi
+  # semgrep:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
+
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v4
+  #       with:
+  #         python-version: '3.x'
+
+  #     - name: Install Semgrep
+  #       run: pip install semgrep
+
+  #     - name: Run Semgrep and save report
+  #       run: semgrep --config .semgrep/ --exclude semgrep-report.json --sarif > semgrep-results.sarif
+
+  # - name: Upload Semgrep report artifact
+  #   uses: actions/upload-artifact@v4
+  #   with:
+  #     name: semgrep-report
+  #     path: semgrep-report.json
+  # - name: Upload SARIF to GitHub Security Dashboard
+  #   uses: github/codeql-action/upload-sarif@v3
+  #   with:
+  #     sarif_file: semgrep-results.sarif
+
+  # sonarqube:
+  #   name: Run SonarQube Scanner
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - uses: actions/checkout@v3
+
+  #     - name: Set up Node.js (or your language)
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '18'
+
+  #     - name: Install dependencies
+  #       run: npm install
+
+  #     - name: Run SonarQube Scanner
+  #       env:
+  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #       run: |
+  #         npm install -g sonar-scanner
+  #         sonar-scanner
+  # review:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
+
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v4
+  #       with:
+  #         python-version: '3.10'
+
+  #     - name: Install dependencies
+  #       run: |
+  #         python -m pip install --upgrade pip
+  #         pip install -r requirements.txt
+
+  #     - name: Run AI Code Review
+  #       env:
+  #         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       run: python src/reviewer.py
