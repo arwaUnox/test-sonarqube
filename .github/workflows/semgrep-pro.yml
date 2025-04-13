@@ -1,4 +1,4 @@
-name: Semgrep CI
+name: Semgrep  PRO CI
 
 on:
   push:
