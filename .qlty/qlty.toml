@@ -61,40 +61,49 @@ default = true
 
 [[plugin]]
 name = "actionlint"
+output_format = "sarif"
 
 [[plugin]]
 name = "checkov"
+output_format = "sarif"
 
 [[plugin]]
 name = "dotenv-linter"
 mode = "comment"
+output_format = "sarif"
 
 [[plugin]]
 name = "eslint"
 version = "8.57.1"
 package_file = "package.json"
 package_filters = ["eslint", "jest", "prettier"]
+output_format = "sarif"
 
 [[plugin]]
 name = "golangci-lint"
 mode = "comment"
+output_format = "sarif"
 
 [[plugin]]
 name = "markdownlint"
 mode = "comment"
+output_format = "sarif"
 
 [[plugin]]
 name = "osv-scanner"
+output_format = "sarif"
 
 [[plugin]]
 name = "prettier"
 version = "3.4.2"
 package_file = "package.json"
 package_filters = ["prettier"]
+output_format = "sarif"
 
 [[plugin]]
 name = "ripgrep"
 mode = "comment"
+output_format = "sarif"
 
 [[plugin]]
 name = "trivy"
@@ -102,9 +111,12 @@ drivers = [
   "config",
   "fs-vuln",
 ]
+output_format = "sarif"
 
 [[plugin]]
 name = "trufflehog"
+output_format = "sarif"
 
 [[plugin]]
 name = "yamllint"
+output_format = "sarif"
