@@ -37,18 +37,21 @@ jobs:
         run: |
           qlty install
           qlty check --all --sarif > qlty-results.sarif || true
-
-      - name: Deep Clean SARIF for GitHub
+      - name: Deep Clean SARIF for GitHub Compatibility
         run: |
           jq '
           .runs[0].results |= map(
-              del(.taxa[].name) |
-              if .locations[0].physicalLocation.region.endLine < 1 or .locations[0].physicalLocation.region.endColumn < 1 then
-              .locations[0].physicalLocation.region.endLine = 1 |
-              .locations[0].physicalLocation.region.endColumn = 1
-              else
-              .
-              end
+              # Fix region data
+              (.locations[0].physicalLocation.region //= {
+              "startLine": 1,
+              "startColumn": 1,
+              "endLine": 1,
+              "endColumn": 1
+              }) |
+              (.locations[0].physicalLocation.region.endLine |= if . == 0 then 1 else . end) |
+              (.locations[0].physicalLocation.region.endColumn |= if . == 0 then 1 else . end) |
+              # Clean illegal SARIF fields
+              (.taxa |= map(del(.name)))
           ) |
           del(.runs[].tool.driver.notifications) |
           del(.runs[].automationDetails)
