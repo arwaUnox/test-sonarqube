@@ -41,7 +41,7 @@ jobs:
         run: |
           jq '
           .runs[0].results |= map(
-              # Fix region data
+              # Fix invalid region values
               (.locations[0].physicalLocation.region //= {
               "startLine": 1,
               "startColumn": 1,
@@ -50,8 +50,9 @@ jobs:
               }) |
               (.locations[0].physicalLocation.region.endLine |= if . == 0 then 1 else . end) |
               (.locations[0].physicalLocation.region.endColumn |= if . == 0 then 1 else . end) |
-              # Clean illegal SARIF fields
-              (.taxa |= map(del(.name)))
+              # Remove illegal SARIF fields
+              (.taxa |= map(del(.name))) |
+              del(.fixes)
           ) |
           del(.runs[].tool.driver.notifications) |
           del(.runs[].automationDetails)
