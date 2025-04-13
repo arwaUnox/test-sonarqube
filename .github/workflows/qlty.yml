@@ -30,7 +30,7 @@ jobs:
           NO_COLOR: true
 
         run: |
-          qlty check --sarif > qlty-results.sarif || true
+          qlty check --all --sarif > qlty-results.sarif || true
 
       - name: Clean SARIF for GitHub Compatibility
         run: |
