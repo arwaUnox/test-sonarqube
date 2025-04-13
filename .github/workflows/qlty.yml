@@ -31,11 +31,21 @@ jobs:
 
         run: |
           qlty check --all --sarif > qlty-results.sarif || true
+
+      - name: Clean SARIF for GitHub Compatibility
+        run: |
+          jq 'del(.runs[].tool.driver.notifications)' qlty-results.sarif > cleaned-results.sarif
+
+      - name: Upload SARIF to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: cleaned-results.sarif
+
       - name: Upload qlty report artifact
         uses: actions/upload-artifact@v4
         with:
           name: qlty-report
-          path: qlty-results.sarif
+          path: cleaned-results.sarif
 
       - name: Upload SARIF to GitHub Security Dashboard
         uses: github/codeql-action/upload-sarif@v3
