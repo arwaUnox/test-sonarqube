@@ -1,0 +1,23 @@
+name: Semgrep CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  semgrep:
+    name: Run Semgrep Pro rules
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Semgrep Pro rules
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: "pro"
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
